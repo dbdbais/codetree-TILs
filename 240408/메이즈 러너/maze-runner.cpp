@@ -222,15 +222,14 @@ int getScore(){
 void solve(){
     while(K--){
         playerMove();
+        if(check()) break;
         auto ret = makeSquare();
         //cout << ret.first << "<" << ret.second.first <<", " <<ret.second.second << ">"<< endl;
-        if(check()) break;
         rotate(ret);
         //print();
     }
     cout << getScore() << endl;
     cout << exitX <<" "<< exitY << endl;
-
 }
 
 int main(){
