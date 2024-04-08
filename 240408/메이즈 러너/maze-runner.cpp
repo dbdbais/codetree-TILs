@@ -144,9 +144,6 @@ void rotate(pair<int,pair<int,int>> sq){
     int tmp [d+1][d+1];
     int tmpVisited[d+1][d+1];
 
-    memset(tmp,0,sizeof(tmp));
-    memset(tmpVisited,0,sizeof(tmpVisited));
-
     for(int i=1;i<=d;i++){
         for(int j=1;j<=d;j++){
             tmp[i][j] = arr[x+d-j][y+i-1];  //arr 대입
