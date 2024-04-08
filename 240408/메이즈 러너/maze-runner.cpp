@@ -88,12 +88,16 @@ bool isIn(int x,int y,int d){
 }
 pair<int,pair<int,int>> makeSquare(){
     pair<int,pair<int,int>> ret;
-    for(int a =2;a<=N;a++){
-        for(int i=1;i<=N-a+1;i++){
-            for(int j=1;j<=N-a+1;j++){
-                if(isIn(i,j,a)){
-                    return{a,{i,j}};
-                }
+    int rad = 1e9;
+    for(Player p : vec){
+        if(p.done) continue;
+        int tmp = max(abs(exitX- p.x),abs(exitY-p.y))+1;
+        if(rad> tmp) rad = tmp; //최소 값으로 갱신
+    }
+    for(int i=1;i<=N-rad+1;i++){
+        for(int j=1;j<=N-rad+1;j++){
+            if(isIn(i,j,rad)){
+                return{rad,{i,j}};
             }
         }
     }
@@ -143,6 +147,9 @@ void rotate(pair<int,pair<int,int>> sq){
 
     int tmp [d+1][d+1];
     int tmpVisited[d+1][d+1];
+
+    memset(tmp,0,sizeof(tmp));
+    memset(tmpVisited,0,sizeof(tmpVisited));
 
     for(int i=1;i<=d;i++){
         for(int j=1;j<=d;j++){
