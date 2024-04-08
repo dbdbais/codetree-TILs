@@ -67,7 +67,7 @@ void input(){
     int x,y,no=1;
     For(i,0,M){
         cin >> x >> y;
-        visited[x][y] = no;
+        visited[x][y] += no;
         vec.push_back(Player(no++,x,y));
     }
     cin >> exitX >> exitY;
@@ -165,10 +165,9 @@ void rotate(pair<int,pair<int,int>> sq){
             tmpVisited[i][j] = visited[x+d-j][y+i-1];  //arr 대입
             if(tmpVisited[i][j] > 0){   //방문자 바꾼다.
                 for(Player & p : vec){
-                    if(p.no == tmpVisited[i][j]){
+                    if(p.x == (x+d-j) && p.y == (y+i-1)){
                         p.x = x + i-1;
                         p.y = y + j-1;
-                        break;
                     }
                 }
             }
@@ -199,7 +198,7 @@ void rotate(pair<int,pair<int,int>> sq){
         }
         cout << endl;
     }
-     */
+*/
 }
 
 bool check(){
