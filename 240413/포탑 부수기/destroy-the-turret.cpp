@@ -236,20 +236,21 @@ void BFS(int x, int y,int t) {
     }
     else {  //레이저 공격
         //cout <<"Laser" <<endl;
-        if(visited[fx][fy]>2) {
-            DFS(x, y, 1);
+        DFS(x, y, 1);
 
-            for (auto elem: path) {
-                //경로에 있는 거 뺀다.
-                //cout << elem.first <<" ," << elem.second <<" - > ";
-                doAtked(elem.first, elem.second, arr[x][y] / 2);
-                arr[elem.first][elem.second] = max(arr[elem.first][elem.second] - arr[x][y] / 2, 0);
-            }
-            //cout << endl;
-
-            found = false;
-            path.clear();
+        for (auto elem: path) {
+            //경로에 있는 거 뺀다.
+            //cout << elem.first <<" ," << elem.second <<" - > ";
+            doAtked(elem.first, elem.second, arr[x][y] / 2);
+            arr[elem.first][elem.second] = max(arr[elem.first][elem.second] - arr[x][y] / 2, 0);
         }
+        //cout << endl;
+
+        found = false;
+        path.clear();
+
+
+
     }
     doAtked(fx,fy,arr[x][y]);
     arr[fx][fy] = max(arr[fx][fy]-arr[x][y],0); //목적지 공격
