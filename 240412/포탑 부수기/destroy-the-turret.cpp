@@ -18,10 +18,8 @@ const int bombX[] = {0,0,-1,1,1,1,-1,-1};
 const int bombY[] = {1,-1,0,0,1,-1,1,-1};
 int N, M, K;
 int visited[12][12];
-bool attacked[12][12];
 int arr[12][12];
 int fx, fy;
-bool found;
 
 struct tower {
     int x;
@@ -63,7 +61,7 @@ vector<tower> vec;
 
 void output() {
     For(i, 0, N) {
-        For(j, 0, N) {
+        For(j, 0, M) {
             cout << arr[i][j] << " ";
         }
         cout << endl;
@@ -96,20 +94,31 @@ bool selTarget(tower a, tower b) {
 
 
 bool out(int x, int y) {
-    return x < 0 || y < 0 || x >= N || y >= N;
+    return x < 0 || y < 0 || x >= N || y >= M;
 }
 
-int restrict(int x){
+pair<int,int> restrict(int x,int y){
+    pair<int,int> ret;
     if (x < 0) {
-        return (x % N + N)% N;
+        ret.first=  (x % N + N)% N;
     }
     else if (x >= N) {
-        return x % N;
+        ret.first=  x % N;
     }
     else{
-        return x;
-
+        ret.first = x;
     }
+    if (y < 0) {
+        ret.second=  (y % M + M)% M;
+    }
+    else if (y >= M) {
+        ret.second=  y % N;
+    }
+    else{
+        ret.second = y;
+    }
+    return ret;
+
 }
 void doAtk(int x,int y,int atk,int tim){
     for(tower & t : vec){
@@ -162,8 +171,9 @@ void BFS(int x, int y,int t) {
             int qx = px + dx[i];  //현재 위치로
             int qy = py + dy[i];
             if (out(qx, qy)) {	//나갔다면
-                qx = restrict(qx);
-                qy = restrict(qy);	//좌표 안으로 제한한다.
+                auto resCord = restrict(qx,qy);
+                qx = resCord.first;
+                qy = resCord.second;
             }
             if(arr[qx][qy] == 0) continue;  //0이면 컨티뉴
             if(visited[qx][qy] > visited[cord.first][cord.second]+1){
@@ -172,9 +182,9 @@ void BFS(int x, int y,int t) {
             }
         }
     }
-    /*
+/*
     For(i, 0, N) {
-        For(j, 0, N) {
+        For(j, 0, M) {
             if(visited[i][j] == INF){
                 cout << "I ";
             }
@@ -186,7 +196,7 @@ void BFS(int x, int y,int t) {
         cout << endl;
     }
     cout << endl;
-     */
+*/
     vector<pair<int,int>> path;
     q.push({fx,fy});
     int rdir = 3;
@@ -200,8 +210,9 @@ void BFS(int x, int y,int t) {
             int qx = tx +dx[i];
             int qy = ty + dy[i];
             if (out(qx, qy)) {	//나갔다면
-                qx = restrict(qx);
-                qy = restrict(qy);	//좌표 안으로 제한한다.
+                auto resCord = restrict(qx,qy);
+                qx = resCord.first;
+                qy = resCord.second;
             }
             if(arr[qx][qy] == 0) continue;  //0이면 컨티뉴
             if(visited[qx][qy] == val-1){
@@ -218,8 +229,9 @@ void BFS(int x, int y,int t) {
             int qx = fx + bombX[i];
             int qy = fy + bombY[i];
             if(out(qx,qy)){
-                qx = restrict(qx);
-                qy = restrict(qy);	//좌표 안으로 제한한다.
+                auto resCord = restrict(qx,qy);
+                qx = resCord.first;
+                qy = resCord.second;
             }
             if(arr[qx][qy] == 0 || (qx == x && qy == y)) continue;  //이미 부서진 포탑이거나 본인은 뺀다.
             doAtked(qx,qy, arr[x][y] / 2);
@@ -274,7 +286,7 @@ void solve() {
 void input() {
     int no = 1;
     For(i, 0, N) {
-        For(j, 0, N) {
+        For(j, 0, M) {
             cin >> arr[i][j];
             if (arr[i][j] > 0) {	//포탑이라면
                 vec.push_back(tower(no++,i, j, arr[i][j]));
@@ -288,6 +300,5 @@ int main() {
     cin >> N >> M >> K;
     input();
     solve();
-
     return 0;
 }
