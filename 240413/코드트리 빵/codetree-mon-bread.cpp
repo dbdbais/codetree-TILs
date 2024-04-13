@@ -89,7 +89,7 @@ void output(){
 
 void firstMove(int t){
     for(auto & p : pVec){
-        if(p.m > t || p.done) continue;   //시간이 안맞거나 이미 끝났다면
+        if(!p.isBase || p.done) continue;   //시간이 안맞거나 이미 끝났다면
         int curDist = getDistance(p.x,p.y,p.fx,p.fy);
         int mnDist = curDist;
 
@@ -128,7 +128,7 @@ void firstMove(int t){
 
 void secondMove(int t){
     for(person & p :pVec){
-        if(p.m > t || p.done) continue;   //시간이 안맞거나 이미 끝났다면
+        if(!p.isBase|| p.done) continue;   //시간이 안맞거나 이미 끝났다면
 
         if(p.x == p.fx && p.y == p.fy){ //도착지에 도착했다면
             p.done = true;
@@ -141,24 +141,27 @@ void secondMove(int t){
 
 void thirdMove(int t){
     for(person &p : pVec){
-        if(p.m != t) continue;   //시간이 안맞다면
-        cx = p.fx;
-        cy = p.fy;   //전역변수로 설정하고
-        //cout << "c store" << cx << cy << endl;
-        //베이스 캠프에 들어간다. 방문처리
-        sort(basecamp.begin(),basecamp.end());
+        if(p.m == t) {
+            cx = p.fx;
+            cy = p.fy;   //전역변수로 설정하고
+            //cout << "c store" << cx << cy << endl;
+            //베이스 캠프에 들어간다. 방문처리
+            sort(basecamp.begin(),basecamp.end());
 
-        for(auto & bc : basecamp){
-            if(bc.used) continue;
-            //사용가능하다면
-            p.x = bc.x;
-            p.y = bc.y;
-            bc.used = true;
-            //p.isBase = true;
-            visited[p.x][p.y] = true;
-            //베이스 캠프로 세팅
+            for(auto & bc : basecamp){
+                if(bc.used) continue;
+                //사용가능하다면
+                p.x = bc.x;
+                p.y = bc.y;
+                bc.used = true;
+                p.isBase = true;
+                visited[p.x][p.y] = true;
+                //베이스 캠프로 세팅
+                break;
+            }
             break;
         }
+
     }
 
 }
@@ -177,7 +180,7 @@ void solve(){
         firstMove(t);
         secondMove(t);
         thirdMove(t);
-        //output();
+       // output();
         if(check()) break;
         t++;
     }
