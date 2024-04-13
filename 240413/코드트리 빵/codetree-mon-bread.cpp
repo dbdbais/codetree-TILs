@@ -170,8 +170,6 @@ bool check(){
     return true;
 }
 
-
-
 void solve(){
     int t = 1;
     while(true){
