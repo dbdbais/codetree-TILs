@@ -93,7 +93,7 @@ bool check(){
     return false;
 }
 
-void color(int x,int y,int no,int pos){
+void color(int x,int y,int pos){
 
     visited[x][y] = no;
 
@@ -109,6 +109,10 @@ void color(int x,int y,int no,int pos){
     else{
         rVec.push_back(robot(x,y));
     }
+
+
+
+
 
 }
 
@@ -154,7 +158,7 @@ int rBFS(int x,int y){
             int qx = tx + dx[i];
             int qy = ty + dy[i];
             if(out(qx,qy)||rVisited[qx][qy]||visited[qx][qy] == 0) continue;
-            if(position[qx][qy] && visited[qx][qy] == val){
+            if(position[qx][qy] && visited[qx][qy]== val){
                 if(mx < qx) mx = qx;
                 rVisited[qx][qy] = true;
                 //cout << qx << qy << endl;
@@ -177,7 +181,7 @@ int rBFS(int x,int y){
         }
     }
 
-    /*
+/*
     For(i,1,R+1){
         For(j,1,C+1){
             cout << rVisited[i][j]<<" ";
@@ -192,7 +196,9 @@ int rBFS(int x,int y){
 void robotMove(){
     for(robot & r : rVec){
         if(r.done) continue;
-        r.score = max(rBFS(r.x,r.y)-2,0);
+        int num = rBFS(r.x,r.y)-2;
+        r.done = true;
+        r.score = num;
         r.done = true;
     }
 }
@@ -225,7 +231,7 @@ void dropRocket(int col,int pos){
             done = true;
         }
     }
-    color(curX,curY,no,pos);
+    color(curX,curY,pos);
 }
 
 void input(){
