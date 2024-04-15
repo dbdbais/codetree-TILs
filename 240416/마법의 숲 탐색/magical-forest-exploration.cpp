@@ -84,6 +84,14 @@ int rotate(int pos, bool left){
     }
 
 }
+bool check(){
+    For(i,1,3){
+        For(j,1,C+1){
+            if(visited[i][j]) return true;
+        }
+    }
+    return false;
+}
 
 void color(int x,int y,int no,int pos){
 
@@ -92,9 +100,16 @@ void color(int x,int y,int no,int pos){
     For(i,0,4){
         visited[x+dx[i]][y+dy[i]] = no;
     }
-
     position[x+dx[pos]][y+dy[pos]] = true;
-    rVec.push_back(robot(x,y));
+    if(check()){
+        no =0;
+        memset(visited,0,sizeof(visited));
+        memset(position,false,sizeof(position));
+    }
+    else{
+        rVec.push_back(robot(x,y));
+    }
+
 }
 
 bool move(int x,int y,bool left){
@@ -120,14 +135,7 @@ bool move(int x,int y,bool left){
     }
     return true;
 }
-bool check(){
-    For(i,1,3){
-        For(j,1,C+1){
-            if(visited[i][j]) return true;
-        }
-    }
-    return false;
-}
+
 
 int rBFS(int x,int y){
     memset(rVisited,false,sizeof(rVisited));
@@ -228,11 +236,6 @@ void input(){
     For(i,0,K){
         cin >> a >> b;
         dropRocket(a,b);
-        if(check()){
-            no =0;
-            memset(visited,0,sizeof(visited));
-            memset(position,false,sizeof(position));
-        }
         robotMove();
         //output();
     }
