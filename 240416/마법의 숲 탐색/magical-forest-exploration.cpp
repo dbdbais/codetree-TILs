@@ -109,11 +109,6 @@ void color(int x,int y,int pos){
     else{
         rVec.push_back(robot(x,y));
     }
-
-
-
-
-
 }
 
 bool move(int x,int y,bool left){
@@ -154,31 +149,29 @@ int rBFS(int x,int y){
         int tx = cur.second.first;
         int ty = cur.second.second;
 
-        For(i,0,4){
-            int qx = tx + dx[i];
-            int qy = ty + dy[i];
-            if(out(qx,qy)||rVisited[qx][qy]||visited[qx][qy] == 0) continue;
-            if(position[qx][qy] && visited[qx][qy]== val){
-                if(mx < qx) mx = qx;
-                rVisited[qx][qy] = true;
-                //cout << qx << qy << endl;
-                For(j,0,4){
-                    int ax = qx + dx[j];
-                    int ay = qy + dy[j];
-                    if(out(ax,ay) || rVisited[ax][ay]||visited[ax][ay] == 0) continue;
-                    if(mx < ax) mx = ax;
-                    q.push({visited[ax][ay],{ax,ay}});
-                    rVisited[ax][ay] = true;
-                }
-
-            }
-            else{
-                if(visited[qx][qy] != val) continue;
-                rVisited[qx][qy] = true;
-                if(mx < qx) mx = qx;
-                q.push({val,{qx,qy}});
+        if(position[tx][ty] && visited[tx][ty] == val){ //현재 위치가 포지션이라면
+            For(j,0,4){
+                int ax = tx + dx[j];
+                int ay = ty + dy[j];
+                if(out(ax,ay) || rVisited[ax][ay]||visited[ax][ay] == 0) continue;
+                if(mx < ax) mx = ax;
+                q.push({visited[ax][ay],{ax,ay}});
+                rVisited[ax][ay] = true;
             }
         }
+        else{   //아니라면
+            For(i,0,4){
+                int qx = tx + dx[i];
+                int qy = ty + dy[i];
+                if(out(qx,qy)||rVisited[qx][qy]||visited[qx][qy] != val) continue;
+                if(mx < qx) mx = qx;
+                q.push({visited[qx][qy],{qx,qy}});
+                rVisited[qx][qy] = true;
+            }
+
+        }
+
+
     }
 
 /*
@@ -254,7 +247,7 @@ int getScore(){
     return sm;
 }
 int main(){
-    fastIO();
+    //fastIO();
     input();
 
     cout << getScore() << endl;
