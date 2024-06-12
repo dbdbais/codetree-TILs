@@ -17,7 +17,7 @@ const int dy[] = {0,1,0,-1};
 //위 오 아 왼
 
 int arr[41][41];
-//장애물d
+//장애물
 int kArr[41][41];
 int kTemp[41][41];
 // 기사 위치, 복사될 배열
@@ -34,8 +34,11 @@ struct Knight{
     bool touched = false;
     int dmg = 0;
 
+    Knight(int x,int y,int h,int w,int hp):x(x),y(y),h(h),w(w),hp(hp){
+
+    }
     void printInfo(){
-        cout << x << y << h << w << hp << life << dmg <<endl;
+        cout << "HP: " << hp <<" Life : "<< life <<" DMG : "<< dmg <<endl;
     }
 };
 vector<Knight> vec;
@@ -76,7 +79,7 @@ void input(){
     }
     For(i,0,N){
         cin >> r >> c >> h >> w >> k;
-        vec.push_back({r,c,h,w,k});
+        vec.push_back(Knight(r,c,h,w,k));
         For(a,r,r+h){
             For(b,c,c+w){
                 kArr[a][b] = i+1;
@@ -134,9 +137,9 @@ bool DFS(int no,int dir){
 
     for(auto t : touch){
         //접촉한 애들 도 민다.
-        if(!ret) break;
         tVec[t-1].touched = true;
         ret = DFS(t,dir);
+        if(!ret) break;
         //하나라도 false가 뜨면 break
     }
     //실제로 구조체안의 기사 정보 업데이트
@@ -154,6 +157,7 @@ bool DFS(int no,int dir){
 
 void solve(){
     while(kOrder.size()){
+
         auto ord = kOrder.front(); kOrder.pop();
         int no = ord.first;
         int dir = ord.second;
@@ -170,7 +174,7 @@ void solve(){
             vec = tVec;
             //실제로 반영
             For(i,0,N){
-                if(!vec[i].life || i == no-1 || vec[i].touched == false) continue;
+                if(!vec[i].life || vec[i].touched == false) continue;
                 int dmg =0;
                 int curX = vec[i].x;
                 int curY = vec[i].y;
@@ -184,12 +188,20 @@ void solve(){
                 }
 
                 vec[i].dmg += dmg;
-                if(vec[i].hp <= vec[i].dmg) vec[i].life = false;
+                if(vec[i].hp <= vec[i].dmg){
+                    vec[i].life = false;
+                    //비워준다.
+                    For(a,curX,curX+curH){
+                        For(b,curY,curY+curW){
+                           kArr[a][b] = 0;
+                        }
+                    }
+                }
                 //데미지가 더 심하면 죽음 처리
                 vec[i].touched = false;
             }
         }
-        //print();
+       //print();
     }
 
     int ans =0;
