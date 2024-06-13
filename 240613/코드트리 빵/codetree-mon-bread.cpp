@@ -97,10 +97,10 @@ void input(){
 
 void getDist(int x,int y){
     memset(dVisited,false,sizeof(dVisited));
-    memset(dist,0,sizeof(dist));
+    fill(&dist[0][0],&dist[0][0]+17*17,1e9);
 
     queue<pair<int,int>> q;
-
+    dist[x][y] = 0;
     dVisited[x][y] = true;
     q.push({x,y});
 
@@ -121,6 +121,15 @@ void getDist(int x,int y){
             dVisited[qx][qy] = true;
             q.push({qx,qy});
         }
+    }
+}
+
+bool comp(pair<int,int> a, pair<int,int>b){
+    if(a.first == b.first){
+        return a.second < b.second;
+    }
+    else{
+        return a.first < b.first;
     }
 }
 
@@ -145,12 +154,13 @@ void firstMove(int t){
             if(out(qx,qy) || visited[qx][qy]) continue;
             getDist(qx,qy);
             //qx qy에 맞게 모든 거리 최소로 갱신됨
-
             distVec.push_back({dist[storeX][storeY],a});
-            //후보지 다 넣고
+                //후보지 다 넣고
+
+
         }
 
-        sort(distVec.begin(),distVec.end());
+        sort(distVec.begin(),distVec.end(),comp);
 
         int optimalDirec  = distVec.front().second;
 
@@ -177,8 +187,8 @@ pair<int,int> calcDist(pair<int,int> store){
     vector<bDist> calVec;
     for(auto elem : camps){
         if(visited[elem.first][elem.second]) continue;
-        int tmpDist = abs(elem.first - store.first) + abs(elem.second - store.second);
-        calVec.push_back({tmpDist,elem.first,elem.second});
+        getDist(elem.first,elem.second);
+        calVec.push_back({dist[store.first][store.second],elem.first,elem.second});
     }
     sort(calVec.begin(),calVec.end());
     return {calVec.front().x,calVec.front().y};
@@ -212,6 +222,7 @@ void solve(){
         thirdMove(_time);
         //cout << _time << endl;
         //output();
+        //if(_time == 10 )break;
     }
     cout << _time << endl;
 }
