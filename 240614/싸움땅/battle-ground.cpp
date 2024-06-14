@@ -122,6 +122,7 @@ void fight(int o, int h){
     winner._score += abs(oFire - hFire);
     //점수 추가하고
     pArr[winner.x][winner.y] = w;
+    //최종 자리는 승자가 가져감
     //숫자 업데이트
     if(loser.gun != 0){
         arr[loser.x][loser.y].push_back(loser.gun);
@@ -130,14 +131,13 @@ void fight(int o, int h){
     }
 
     For(i,0,4) {
-        int lx = loser.x + dx[loser.d+i];
-        int ly = loser.y + dy[loser.d+i];
+        int lx = loser.x + dx[(loser.d+i) % 4];
+        int ly = loser.y + dy[(loser.d+i) % 4];
 
         //나갔거나 누군가 있다면
         if (out(lx, ly) || pArr[lx][ly]) {
             continue;
         }
-
         loser.d = (loser.d +i) %4;
         //비울 필요 없이 떠나면 됨
         loser.x = lx;
@@ -170,9 +170,9 @@ void playerMove(){
         int cx = cur.x;
         int cy = cur.y;
         int cd = cur.d;
-
-        int qx = cx + dx[cd];
-        int qy = cy + dy[cd];
+        //이전 값들
+        int qx = cur.x + dx[cd];
+        int qy = cur.y + dy[cd];
 
         if(out(qx,qy)){
             cd = backWard(cd);
@@ -181,21 +181,21 @@ void playerMove(){
             cur.d = cd;
         }
         //나갈경우 반대로 처리
-
+        pArr[cx][cy] = 0;
+        cur.x = qx;
+        cur.y = qy;
+        //실제 좌표 업데이트
         //다른 플레이어가 있다면 싸우고
         if(pArr[qx][qy]){
             //일단 비우고
-            pArr[cx][cy] = 0;
-            cur.x = qx;
-            cur.y = qy;
             fight(i,pArr[qx][qy]);
         }
         //없다면 총을 집어든다.
         else{
             //총이 있다면
-            if(arr[qx][qy].size()){
-                sort(arr[qx][qy].begin(),arr[qx][qy].end());
-                int bGun = arr[qx][qy].back();
+            if(arr[cur.x][cur.y].size()){
+                sort(arr[cur.x][cur.y].begin(),arr[cur.x][cur.y].end());
+                int bGun = arr[cur.x][cur.y].back();
                 if(cur.gun < bGun){
                     arr[qx][qy].pop_back();
                     arr[qx][qy].push_back(cur.gun);
@@ -204,13 +204,8 @@ void playerMove(){
                  //새로운 총 든다.
                 }
             }
-            pArr[cx][cy] = 0;
             pArr[qx][qy] = i;
             //플레이어 배열 이동
-
-            cur.x = qx;
-            cur.y = qy;
-            //실제 좌표 업데이트
         }
 
 
