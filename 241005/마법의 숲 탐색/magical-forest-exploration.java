@@ -47,7 +47,7 @@ public class Main {
 			return !mout(x,y+2) && !mout(x-1,y+1) && !mout(x+1,y+1) && !mout(x+1,y+2)&& !mout(x+2,y+1); 
 		}
 		boolean isStuck() {
-			return x <= 2;
+			return x <= 3;
 		}
 		void goDown() {
 			this.x+=1;
