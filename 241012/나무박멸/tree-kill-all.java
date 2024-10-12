@@ -138,7 +138,7 @@ public class Main{
 			
 			
 			
-			if(out(qx,qy) || wall[qx][qy]|| tmpVisited[qx][qy]||!tree[qx][qy] || dead[qx][qy] > 0) continue;
+			if(out(qx,qy) || wall[qx][qy]|| tmpVisited[qx][qy]||!tree[qx][qy]||arr[qx][qy] == 0 || dead[qx][qy] > 0) continue;
 			
 			cnt += arr[qx][qy];
 			tmpVisited[qx][qy] = true;
@@ -173,10 +173,15 @@ public class Main{
 			int qy = cur.y + bdy[qdir];
 			int qk = cur.k;
 			
-			if(out(qx,qy) || wall[qx][qy]|| tmpVisited[qx][qy]) continue;
+			if(out(qx,qy) || wall[qx][qy]|| tmpVisited[qx][qy] ) continue;
 			
-	
-			dead[qx][qy] = C+1;
+			if(arr[qx][qy] == 0) {
+				dead[qx][qy] =  C+1;
+				tmpVisited[qx][qy] = true;
+				continue;
+			}
+			
+			dead[qx][qy] =  C+1;;
 			tree[qx][qy] = false;
 			arr[qx][qy] = 0;
 			tmpVisited[qx][qy] = true;
@@ -222,9 +227,13 @@ public class Main{
 		while(M-- > 0) {
 			decrease();
 			//print();
+			//System.out.println("GROW");
 			grow();
 			//print();
+			//System.out.println("BREED");
 			breed();
+			//print();
+			//System.out.println("TOXIC");
 			realToxic();
 			//print();			
 			//System.out.println("answer :" + answer);
