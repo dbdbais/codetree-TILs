@@ -101,7 +101,7 @@ public class Main{
 			for(int j=N-1;j>=0;j--) {
 				if(tree[i][j]) {
 					int tcnt = toxicCnt(i,j);
-					if(tcnt > cnt) {
+					if(tcnt >= cnt) {
 						fx =i;
 						fy =j;
 						cnt = tcnt;	//최대 값 갱신
@@ -221,9 +221,9 @@ public class Main{
 		
 		while(M-- > 0) {
 			decrease();
-			
+			//print();
 			grow();
-			
+			//print();
 			breed();
 			realToxic();
 			//print();			
